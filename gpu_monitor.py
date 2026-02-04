@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 
 try:
-    from rich.console import Console
+    from rich.console import Console, Group
     from rich.live import Live
     from rich.table import Table
     from rich.panel import Panel
@@ -101,22 +101,21 @@ def generate_table(gpu_data):
         fan_text = f"{gpu['fan_speed']}%" if isinstance(gpu['fan_speed'], int) else "[dim]N/A[/dim]"
 
         power_bar = ProgressBar(total=100, completed=gpu["power_percent"], width=20)
-        power_text = Text.assemble(
-            f"{gpu['power_usage']:.1f}W / {gpu['power_limit']:.0f}W\n",
+        power_text = Group(
+            Text(f"{gpu['power_usage']:.1f}W / {gpu['power_limit']:.0f}W"),
             power_bar
         )
 
         mem_bar = ProgressBar(total=100, completed=gpu["mem_percent"], width=20)
-        mem_text = Text.assemble(
-            f"{gpu['mem_used']:.0f}MiB / {gpu['mem_total']:.0f}MiB\n",
+        mem_text = Group(
+            Text(f"{gpu['mem_used']:.0f}MiB / {gpu['mem_total']:.0f}MiB"),
             mem_bar
         )
 
         gpu_util_bar = ProgressBar(total=100, completed=gpu["gpu_util"], width=20)
-        gpu_util_text = Text.assemble(
-            f"{gpu['gpu_util']}%",
-            "\n",
-            gpu_util_bar,
+        gpu_util_text = Group(
+            Text(f"{gpu['gpu_util']}%"),
+            gpu_util_bar
         )
 
         table.add_row(
